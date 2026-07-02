@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventário da desconexão · Manual do Usuário</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..700;1,6..72,300..700&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#f6efdd; --paper-2:#efe4c9; --cream:#fffaf0;
+  --ink:#1a1a1a; --red:#d94a32; --mustard:#e89a1c; --blue:#4a8fd1;
+  --green:#7bbf5a; --grey:#9aa0a6; --wood:#c9a96a;
+  --ui-bg:#0d0e12; --ui-card:#16181e; --ui-blue:#0a84ff; --ui-red:#ff3b30; --ui-text:#e8e9ec;
+  --serif-d:"Fraunces",Georgia,serif;
+  --serif-b:"Newsreader",Georgia,serif;
+  --sans:"Archivo",Arial,sans-serif;
+  --ui-font:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --col:min(42rem,92vw);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:auto}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:var(--serif-b); font-size:1.17rem; line-height:1.62;
+  font-optical-sizing:auto;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.09 0 0 0 0 0.06 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+::selection{background:var(--mustard);color:var(--ink)}
+p+p{margin-top:1.15em}
+em{font-style:italic}
+a{color:inherit}
+.col{width:var(--col);margin:0 auto}
+.prose{width:var(--col);margin:2.4rem auto}
+.prose .kicker{font-family:var(--sans);font-size:.72rem;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--red);margin-bottom:.7rem}
+.note{font-size:.9rem;color:#4c463a;border-left:2.5px solid var(--mustard);padding-left:1rem;margin-top:1.4rem}
+
+/* ---------- capa ---------- */
+.capa{min-height:96vh;display:flex;flex-direction:column;justify-content:center;padding:6vh 0 4vh;position:relative}
+.capa .col{max-width:min(56rem,94vw);width:min(56rem,94vw)}
+.eyebrow{font-family:var(--sans);font-weight:600;font-size:.78rem;letter-spacing:.22em;text-transform:uppercase;display:flex;align-items:center;gap:.8rem}
+.eyebrow::after{content:"";flex:1;height:1.5px;background:var(--ink)}
+h1.titulo{
+  font-family:var(--serif-d);
+  font-variation-settings:"opsz" 144,"SOFT" 30,"WONK" 1;
+  font-weight:560;font-size:clamp(2.9rem,9vw,6.4rem);
+  line-height:.98;letter-spacing:-.015em;margin:1.6rem 0 1.6rem;
+}
+h1.titulo .riscado{position:relative;white-space:nowrap}
+h1.titulo .riscado::after{content:"";position:absolute;left:-2%;right:-2%;top:54%;height:.075em;background:var(--red);transform:rotate(-1.2deg)}
+.capa .sub{font-size:clamp(1.1rem,2.4vw,1.42rem);line-height:1.5;max-width:36em;font-weight:400}
+.capa .assina{margin-top:2.2rem;font-family:var(--sans);font-size:.8rem;letter-spacing:.1em;text-transform:uppercase;color:#4c463a;display:flex;gap:1.6rem;flex-wrap:wrap}
+.capa .desce{position:absolute;bottom:3.5vh;left:50%;transform:translateX(-50%);font-family:var(--sans);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;opacity:.65;animation:desce 2.2s ease-in-out infinite}
+@keyframes desce{0%,100%{transform:translate(-50%,0)}50%{transform:translate(-50%,7px)}}
+
+/* ---------- ficha de inventário ---------- */
+.ficha{
+  width:var(--col);margin:2.2rem auto .4rem;
+  border:1.5px solid var(--ink);background:var(--cream);
+  font-family:var(--sans);font-size:.72rem;font-weight:500;
+  letter-spacing:.09em;text-transform:uppercase;
+  display:flex;flex-wrap:wrap;
+}
+.ficha>span{padding:.5rem .8rem;border-right:1.5px solid var(--ink)}
+.ficha>span:last-child{border-right:none;flex:1}
+.ficha .num{background:var(--ink);color:var(--paper);font-weight:700}
+.ficha .estado{color:var(--red);font-weight:700}
+
+/* ---------- divisor de ato ---------- */
+.divisor{width:var(--col);margin:7rem auto 3rem;border-top:3px solid var(--ink);padding-top:1rem}
+.divisor .ato{font-family:var(--sans);font-weight:700;font-size:.78rem;letter-spacing:.24em;text-transform:uppercase}
+.divisor h2{font-family:var(--serif-d);font-variation-settings:"opsz" 90,"SOFT" 40;font-weight:540;font-size:clamp(1.9rem,5vw,3rem);line-height:1.06;margin-top:.5rem}
+.divisor .resumo{margin-top:.9rem;font-size:1.05rem;color:#3e392e;max-width:34em}
+
+/* ---------- estágios de zoom ---------- */
+.stage{position:relative;height:var(--len,300vh)}
+.pin{position:sticky;top:0;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
+.pin svg.cena{width:min(88vmin,900px);height:auto;display:block}
+.pin .legenda-obj{position:absolute;top:2.2rem;left:50%;transform:translateX(-50%);width:auto;margin:0}
+.overlay{
+  position:absolute;left:50%;bottom:7vh;transform:translate(-50%,14px);
+  width:min(34rem,88vw);background:var(--cream);border:1.5px solid var(--ink);
+  box-shadow:5px 5px 0 var(--ink);padding:1.1rem 1.3rem;
+  font-size:1.02rem;line-height:1.5;opacity:0;pointer-events:none;
+}
+.overlay .fonte{display:block;margin-top:.5rem;font-family:var(--sans);font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600}
+.flash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;display:flex;align-items:center;justify-content:center}
+.flash .rev{font-family:var(--serif-d);font-variation-settings:"opsz" 100;font-weight:600;font-size:clamp(1.4rem,4vw,2.4rem);max-width:22em;text-align:center;color:var(--ink);padding:0 6vw}
+
+/* ---------- adesivos digitais (a invasão) ---------- */
+.sticker{
+  position:absolute;font-family:var(--ui-font);background:#fff;color:#111;
+  border-radius:12px;box-shadow:0 10px 28px rgba(0,0,0,.22);
+  padding:.5rem .75rem;font-size:.8rem;line-height:1.35;
+  opacity:0;transform:translateY(10px) rotate(var(--r,2deg)) scale(.96);
+  transition:opacity .45s ease,transform .45s cubic-bezier(.2,.9,.3,1.2);
+  pointer-events:none;
+}
+.sticker.on{opacity:1;transform:translateY(0) rotate(var(--r,2deg)) scale(1)}
+.sticker .pill{display:inline-block;background:var(--ui-blue);color:#fff;border-radius:999px;padding:.14rem .6rem;font-weight:600;font-size:.75rem}
+.sticker .tag{display:inline-block;background:#eef1f5;border-radius:6px;padding:.08rem .4rem;color:#5b6572;font-size:.68rem;font-weight:600;letter-spacing:.04em}
+.sticker .heart{color:var(--ui-red);font-weight:700}
+
+/* ---------- corredores e grades ---------- */
+.grade{width:min(64rem,94vw);margin:2.5rem auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(215px,1fr));gap:1.2rem}
+.peca{border:1.5px solid var(--ink);background:var(--cream);opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
+.peca.vista{opacity:1;transform:none}
+.peca .art{background:var(--paper-2);border-bottom:1.5px solid var(--ink);aspect-ratio:5/4;display:flex;align-items:center;justify-content:center}
+.peca .art svg{width:82%;height:82%}
+.peca .meta{padding:.7rem .8rem}
+.peca .meta .n{font-family:var(--sans);font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--red)}
+.peca .meta .t{font-family:var(--serif-d);font-variation-settings:"opsz" 40;font-weight:600;font-size:1.02rem;margin:.15rem 0 .3rem}
+.peca .meta .d{font-size:.86rem;line-height:1.45;color:#3e392e}
+
+/* ---------- catálogo tipográfico (espécie 3) ---------- */
+.catalogo{width:var(--col);margin:2.4rem auto;border:1.5px solid var(--ink);background:var(--cream)}
+.catalogo .cab{font-family:var(--sans);font-weight:700;font-size:.72rem;letter-spacing:.18em;text-transform:uppercase;background:var(--ink);color:var(--paper);padding:.55rem .9rem}
+.catalogo ul{list-style:none}
+.catalogo li{display:flex;align-items:baseline;gap:.6rem;padding:.62rem .9rem;border-top:1px solid #cdc2a4;font-size:1rem}
+.catalogo li:first-child{border-top:none}
+.catalogo li .item{font-family:var(--serif-d);font-variation-settings:"opsz" 30;font-weight:600;white-space:nowrap}
+.catalogo li .pontos{flex:1;border-bottom:2px dotted #b8ac8c;transform:translateY(-4px)}
+.catalogo li .ano{font-family:var(--sans);font-size:.78rem;font-weight:600;letter-spacing:.06em}
+
+/* ---------- gráfico-sulco ---------- */
+.figura{width:min(46rem,92vw);margin:3rem auto;text-align:center}
+.figura svg{width:min(78vmin,520px);height:auto}
+.figura .cap{font-size:.9rem;color:#4c463a;max-width:32em;margin:1rem auto 0}
+
+/* ---------- feed final ---------- */
+.feed-sec{background:var(--ui-bg);color:var(--ui-text);padding:12vh 0 14vh;position:relative;font-family:var(--ui-font)}
+.feed-sec::before{content:"";position:absolute;top:-90px;left:0;right:0;height:90px;background:linear-gradient(var(--paper),var(--ui-bg))}
+.feed-intro{width:var(--col);margin:0 auto 3.5rem;font-family:var(--serif-b);font-size:1.15rem;line-height:1.6;color:#cfd2d8}
+.feed-intro .kicker{font-family:var(--sans);color:var(--ui-blue)}
+.phone{width:min(420px,92vw);margin:0 auto;border:1px solid #2a2d36;border-radius:34px;background:#0a0b0e;padding:14px 10px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.phone .barra{display:flex;justify-content:space-between;font-size:.72rem;color:#8b8f99;padding:.2rem .9rem .7rem}
+.post{background:var(--ui-card);border:1px solid #23262e;border-radius:16px;margin-bottom:14px;overflow:hidden}
+.post .cab{display:flex;align-items:center;gap:.6rem;padding:.65rem .8rem;font-size:.85rem}
+.post .cab .avt{width:30px;height:30px;border-radius:50%;background:var(--red);flex:none;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;color:#fff}
+.post .cab .quem{font-weight:600}
+.post .cab .patro{margin-left:auto;font-size:.64rem;color:#8b8f99;letter-spacing:.06em;text-transform:uppercase}
+.post .media{background:var(--paper);aspect-ratio:4/3;display:flex;align-items:center;justify-content:center;border-block:1px solid #23262e}
+.post .media svg{width:64%;height:80%}
+.post .acoes{display:flex;gap:1rem;padding:.6rem .85rem .1rem;font-size:1.05rem}
+.post .likes{padding:.25rem .85rem 0;font-size:.83rem;font-weight:600}
+.post .cap{padding:.25rem .85rem .8rem;font-size:.85rem;color:#c3c7ce;line-height:1.45}
+.post .cap b{color:#fff}
+.post .cta{margin:.2rem .85rem .85rem;display:inline-block;background:var(--ui-blue);color:#fff;font-weight:600;font-size:.8rem;border-radius:999px;padding:.35rem .9rem}
+.feed-fim{width:min(420px,92vw);margin:3rem auto 0;text-align:center;font-family:var(--serif-b);font-size:1.05rem;color:#cfd2d8;line-height:1.6}
+.feed-fim .cifra{font-family:var(--serif-d);font-variation-settings:"opsz" 120;font-weight:600;font-size:clamp(1.8rem,5vw,2.6rem);color:#fff;display:block;margin:.6rem 0 .3rem}
+
+/* ---------- contador de poses (progresso global) ---------- */
+.chip{
+  position:fixed;top:14px;right:14px;z-index:50;
+  border:1.5px solid var(--ink);background:var(--cream);
+  font-family:var(--sans);font-weight:700;font-size:.7rem;letter-spacing:.14em;
+  padding:.35rem .6rem;box-shadow:3px 3px 0 var(--ink);
+}
+.chip .lbl{color:var(--red)}
+
+/* ---------- rodapé ---------- */
+footer{border-top:3px solid var(--ink);margin-top:7rem;padding:3rem 0 5rem;font-size:.92rem}
+footer .col{max-width:min(56rem,94vw);width:min(56rem,94vw)}
+footer h3{font-family:var(--sans);font-size:.75rem;letter-spacing:.2em;text-transform:uppercase;margin-bottom:1rem}
+footer p{color:#3e392e;max-width:70em}
+
+@media (max-width:640px){
+  body{font-size:1.06rem}
+  .overlay{bottom:4vh;padding:.9rem 1rem;font-size:.94rem}
+  .pin svg.cena{width:94vmin}
+  .chip{top:10px;right:10px}
+}
+@media (prefers-reduced-motion:reduce){
+  .stage{height:auto!important;padding:8vh 0}
+  .pin{position:relative;height:auto;min-height:70vh}
+  .overlay{opacity:1!important;transform:translateX(-50%)!important;position:relative;left:50%;bottom:auto;margin:1.5rem auto 0}
+  .sticker{opacity:1;transform:rotate(var(--r,2deg))}
+  .capa .desce{animation:none}
+}
+</style>
+</head>
+<body>
