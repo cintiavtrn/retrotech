@@ -22,8 +22,6 @@
 body{background:var(--sea);color:var(--ink);font-family:var(--body);font-optical-sizing:auto;line-height:1.6}
 em{font-style:italic}
 b,strong{font-weight:600}
-
-/* ---------- mar batimétrico com dithering ---------- */
 .hpin{
   position:sticky;top:0;height:100vh;overflow:hidden;
   background:
@@ -32,8 +30,6 @@ b,strong{font-weight:600}
 }
 .hwrap{position:relative}
 .track{position:absolute;top:0;left:0;height:100%;display:flex;align-items:center;will-change:transform}
-
-/* ---------- folhas ---------- */
 .folha{flex:none;position:relative;width:min(92vw,940px);margin:0 7vw;display:flex;align-items:center;justify-content:center}
 .folha.estreita{width:min(88vw,700px)}
 .folha.larga{width:min(96vw,1240px)}
@@ -73,8 +69,6 @@ b,strong{font-weight:600}
 .sticker .pill{display:inline-block;background:var(--ui-blue);color:#fff;border-radius:999px;padding:.12rem .55rem;font-weight:600;font-size:.72rem}
 .sticker .tag{display:inline-block;background:#eef1f5;border-radius:6px;padding:.06rem .4rem;color:#5b6572;font-size:.66rem;font-weight:600}
 .sticker .heart{color:#ff3b30;font-weight:700}
-
-/* capa */
 .folha.capa{width:min(94vw,1020px)}
 .capa .eyebrow{font-family:var(--px);font-size:.66rem;letter-spacing:.18em;color:var(--cy);text-transform:uppercase}
 .capa h1{font-family:var(--disp);font-weight:700;font-size:clamp(2.5rem,7.5vw,5.2rem);line-height:.96;letter-spacing:-.02em;margin:.9rem 0 1.2rem}
@@ -84,14 +78,10 @@ b,strong{font-weight:600}
 .capa .assina{margin-top:1.8rem;font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:#7f97a4;display:flex;gap:1.6rem;flex-wrap:wrap}
 .capa .nav{margin-top:1.2rem;font-family:var(--px);font-size:.66rem;color:var(--sol);animation:navp 2.4s ease-in-out infinite}
 @keyframes navp{0%,100%{transform:translateX(0)}50%{transform:translateX(9px)}}
-
-/* texto */
 .sheet .corpo{font-size:1.04rem;max-width:44rem}
 .sheet .corpo p+p{margin-top:.9em}
 .sheet .corpo .kicker{font-family:var(--disp);font-weight:600;font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);margin-bottom:.5rem}
 .sheet.dark .corpo .kicker{color:var(--rota)}
-
-/* grade de peças (arquipélago) */
 .grade{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:.4rem}
 .peca{border:1.5px solid var(--pink);background:var(--paper2);opacity:0;transform:translateY(14px);transition:opacity .5s ease,transform .5s ease}
 .peca.vista{opacity:1;transform:none}
@@ -102,8 +92,6 @@ b,strong{font-weight:600}
 .peca .meta .t{font-family:var(--disp);font-weight:600;font-size:.98rem;margin:.12rem 0 .25rem}
 .peca .meta .d{font-size:.83rem;line-height:1.42;color:#33475a}
 .peca .meta .rec{font-family:var(--px);font-size:.52rem;letter-spacing:.06em;color:var(--acc);margin-top:.4rem;text-transform:uppercase}
-
-/* catálogo tipográfico */
 .catalogo{border:1.5px solid var(--pink);background:var(--paper2)}
 .catalogo .ccab{font-family:var(--mono);font-weight:600;font-size:.68rem;letter-spacing:.18em;text-transform:uppercase;background:var(--pink);color:var(--paper);padding:.55rem .9rem}
 .catalogo ul{list-style:none}
@@ -112,26 +100,18 @@ b,strong{font-weight:600}
 .catalogo li .item{font-family:var(--disp);font-weight:600;white-space:nowrap}
 .catalogo li .pontos{flex:1;border-bottom:2px dotted #9fb4bd;transform:translateY(-4px)}
 .catalogo li .ano{font-family:var(--mono);font-size:.72rem;font-weight:500;letter-spacing:.04em}
-
-/* mares */
 .mar{flex:none;width:56vw;height:100%;position:relative;display:flex;align-items:center}
 .mar svg{width:100%;height:46vh;overflow:visible}
 .mar .nome{position:absolute;left:50%;top:24%;transform:translateX(-50%);font-family:var(--px);font-size:clamp(.6rem,1.35vw,.78rem);letter-spacing:.26em;color:var(--cy);text-transform:uppercase;white-space:nowrap;opacity:.85}
 .mar .prof{position:absolute;left:50%;bottom:22%;transform:translateX(-50%);font-family:var(--mono);font-size:.6rem;letter-spacing:.14em;color:#5d7684;white-space:nowrap}
-
-/* interlúdios de mapa */
 .folha.interludio{width:100vw;margin:0}
 .folha.interludio svg{width:100vw;height:100vh;display:block}
 .ping{animation:blip 1.8s steps(2,end) infinite}
 @keyframes blip{0%,55%{opacity:1}56%,100%{opacity:.18}}
-
-/* carta geral */
 .folha.geral{width:100vw;margin:0}
 .folha.geral svg{width:100vw;height:100vh;display:block}
 .gjump{cursor:pointer;pointer-events:all}
 .gjump:hover rect,.gjump:hover circle{fill:var(--rota)}
-
-/* feed */
 .phone{width:min(400px,86vw);margin:0 auto;border:1px solid #2a3947;border-radius:30px;background:#0a0f14;padding:12px 9px;overflow:hidden;height:min(74vh,620px);position:relative}
 .phone .pbarra{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.66rem;color:#8b9aa6;padding:.15rem .8rem .6rem}
 .feedcol{will-change:transform}
@@ -148,15 +128,11 @@ b,strong{font-weight:600}
 .post .pcap b{color:#fff}
 .post .cta{margin:.15rem .8rem .8rem;display:inline-block;background:var(--ui-blue);color:#fff;font-weight:600;font-size:.76rem;border-radius:999px;padding:.32rem .85rem}
 .cifra{font-family:var(--disp);font-weight:600;font-size:clamp(1.7rem,4.5vw,2.5rem);color:#fff;display:block;margin:.5rem 0 .3rem}
-
-/* instrumentos fixos */
 .chip{position:fixed;top:14px;right:14px;z-index:60;font-family:var(--px);font-size:.68rem;letter-spacing:.1em;color:var(--sol);border:1.5px solid var(--sol);background:rgba(10,20,29,.85);padding:.4rem .6rem}
 .instr{position:fixed;left:14px;bottom:14px;z-index:60;font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;color:var(--cy);background:rgba(10,20,29,.85);border:1px solid #24404f;padding:.45rem .6rem}
 .instr .segs{display:flex;height:7px;border:1px solid var(--cy);width:130px;margin:.3rem 0 .2rem}
 .instr .segs span{flex:1}
 .instr .segs span:nth-child(odd){background:var(--cy)}
-
-/* rodapé vertical após o atlas */
 footer{background:var(--sea);border-top:1px solid #24404f;padding:4rem 0 6rem;font-size:.9rem}
 footer .fcol{width:min(58rem,92vw);margin:0 auto}
 footer h3{font-family:var(--px);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--cy);margin:2rem 0 .8rem}
