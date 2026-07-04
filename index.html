@@ -131,9 +131,31 @@ a{color:inherit}
 .pista text{font-family:var(--mono);font-weight:700;font-size:13px;fill:var(--acc);pointer-events:none}
 .pista.found text{fill:var(--isoTealDeep)}
 .clue-tooltip{position:fixed;z-index:70;background:var(--pink);color:var(--paper);font-family:var(--mono);
-  font-size:.74rem;line-height:1.4;padding:.6rem .8rem;max-width:220px;box-shadow:0 10px 30px rgba(0,0,0,.4);
-  pointer-events:none;opacity:0;transition:opacity .2s ease;transform:translate(-50%,-110%)}
+  font-size:.92rem;line-height:1.6;padding:.95rem 1.1rem;max-width:340px;box-shadow:0 10px 30px rgba(0,0,0,.4);
+  pointer-events:auto;cursor:pointer;opacity:0;transition:opacity .2s ease;transform:translate(-50%,-110%)}
 .clue-tooltip.on{opacity:1}
+.clue-tooltip .ctclose{display:block;margin-top:.65rem;font-size:.62rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--cy);opacity:.75;text-align:right}
+.vnav{position:fixed;top:60px;right:14px;z-index:52;width:min(348px,92vw);max-height:calc(100vh - 84px);
+  overflow-y:auto;background:var(--paper);color:var(--pink);padding:1.15rem 1.15rem 1.4rem;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);transform:translateX(118%);transition:transform .3s ease}
+.vnav.on{transform:none}
+.vnav h4{font-family:var(--disp);font-size:1.08rem;margin-bottom:.1rem}
+.vnav .vnav-sub{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;opacity:.6;margin-bottom:.6rem}
+.vnav .vnav-prog{font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;margin-bottom:.95rem;
+  padding:.5rem .65rem;background:rgba(0,0,0,.05);border-left:3px solid var(--acc)}
+.vnav-close{position:absolute;top:.7rem;right:.85rem;background:none;border:none;color:var(--pink);font-size:1rem;cursor:pointer;opacity:.6}
+.vrow{display:flex;gap:.6rem;align-items:flex-start;padding:.6rem .5rem;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.08)}
+.vrow:hover{background:rgba(0,0,0,.05)}
+.vrow .vswatch{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+  font-family:var(--mono);font-weight:700;font-size:.78rem;color:#fff;border:1.5px solid rgba(0,0,0,.28)}
+.vrow .vmeta{flex:1;min-width:0}
+.vrow .vtit{font-family:var(--disp);font-size:.92rem;line-height:1.2;display:block}
+.vrow .vloc{font-family:var(--mono);font-size:.64rem;letter-spacing:.01em;opacity:.72;margin-top:.18rem;display:block}
+.vrow .vcheck{flex:0 0 auto;font-family:var(--mono);font-size:.9rem;opacity:.45}
+.vrow.seen{opacity:.6}
+.vrow.seen .vcheck{color:var(--isoTealDeep);opacity:1}
+.dot.seen circle.ring{animation:none;opacity:.85;stroke-dasharray:3 3}
 
 .vp-tabs{display:flex;gap:.4rem;margin-bottom:.9rem}
 .vp-tab{font-family:var(--mono);font-size:.68rem;letter-spacing:.05em;text-transform:uppercase;
@@ -429,6 +451,7 @@ footer p{color:#9db0bc;max-width:72em;font-size:.86rem}
     <button class="legbtn" id="legendBtn">☰ o que é isto</button>
     <span class="brand">atlas da desconexão</span>
     <span class="cluechip" id="clueChip">pistas encontradas: 0/12</span>
+    <button class="toarticle" id="vnavBtn" style="margin-right:.6rem">◎ vinhetas <span id="vnavCount">0/10</span></button>
     <button class="toarticle" id="helpBtn" style="margin-right:.6rem">?</button>
 
     <button class="toarticle" id="toArticleBtn">Ler ensaio completo →</button>
@@ -453,6 +476,13 @@ footer p{color:#9db0bc;max-width:72em;font-size:.86rem}
     <p><b>Números coloridos:</b> vinhetas com argumento, mecanismo e uma interação.</p>
     <p><b>Círculos laranja tracejados pulsando:</b> pistas escondidas, fatos extras. Clique pra revelar; o contador no topo soma.</p>
     <p><b>Bonecos com balão de fala:</b> diálogos reconstruídos de fóruns reais sobre desconexão digital.</p>
+  </div>
+  <div class="vnav" id="vnav">
+    <button class="vnav-close" id="vnavClose">✕</button>
+    <h4>Vinhetas do atlas</h4>
+    <div class="vnav-sub">as 10 paradas do argumento</div>
+    <div class="vnav-prog" id="vnavProg">0 de 10 visitadas · faltam 10</div>
+    <div id="vnavList"></div>
   </div>
   <div class="mapsvg-hint">pontos numerados = vinhetas · marcas tracejadas laranja = pistas escondidas</div>
   <div class="vpanel" id="vpanel">
@@ -1167,16 +1197,17 @@ function ambientSpin(){
 const clueTooltip = document.getElementById("clueTooltip");
 const clueChip = document.getElementById("clueChip");
 let clueHideTimer = null;
+clueTooltip.addEventListener("click", ()=>{ clueTooltip.classList.remove("on"); clearTimeout(clueHideTimer); });
 function revealClue(i, cx, cy, node){
   foundClues.add(i);
   node.classList.add("found");
   clueChip.textContent = `pistas encontradas: ${foundClues.size}/${PISTAS.length}`;
-  clueTooltip.textContent = PISTAS[i].text;
+  clueTooltip.innerHTML = PISTAS[i].text + '<span class="ctclose">toque para fechar ✕</span>';
   clueTooltip.style.left = cx + "px";
   clueTooltip.style.top = cy + "px";
   clueTooltip.classList.add("on");
   clearTimeout(clueHideTimer);
-  clueHideTimer = setTimeout(()=> clueTooltip.classList.remove("on"), 3200);
+  clueHideTimer = setTimeout(()=> clueTooltip.classList.remove("on"), 7000);
 }
 
 function vbLerp(a,b,t){
@@ -1226,6 +1257,7 @@ function openVignette(n){
   clearWidget();
   WIDGETS[v.widget](document.getElementById("vpWidget"), v);
   document.getElementById("vpanel").classList.add("on");
+  markVigVisited(n);
 }
 function setTab(which){
   document.getElementById("tabArg").classList.toggle("on", which==="arg");
@@ -1468,7 +1500,72 @@ document.getElementById("legendClose").addEventListener("click", ()=>{
 document.getElementById("tabArg").addEventListener("click", ()=> setTab("arg"));
 document.getElementById("tabMech").addEventListener("click", ()=> setTab("mech"));
 
+const BAY_LABELS = {
+  feed:"Baía do Feed", hobby:"Mesa Tátil", anchors:"Galpão dos Âncoras",
+  worker:"Oficina Patrocinada", press:"Prensa", capture:"Oficina da Captura",
+  retail:"Convés do Varejo", diag:"Fossa do Diagnóstico"
+};
+const COLOR_NAMES = {};
+COLOR_NAMES[C.roseDeep]="rosa"; COLOR_NAMES[C.tealDeep]="azul-petróleo";
+COLOR_NAMES[C.peachDeep]="coral"; COLOR_NAMES[C.mustardDeep]="mostarda";
+const visitedVig = new Set();
+
+function vigLoc(v){
+  const a = bayAnchor(v.bay);
+  const x = sceneOrigin.x + a.sx + v.dx, y = sceneOrigin.y + a.sy + v.dy;
+  const horiz = x < 620 ? "à esquerda" : (x < 1180 ? "no centro" : "à direita");
+  const vert  = y < 360 ? "no alto"    : (y < 720  ? "no meio"  : "embaixo");
+  return `${vert}, ${horiz} · ${BAY_LABELS[v.bay]||v.bay} · ${COLOR_NAMES[v.color]||"colorida"}`;
+}
+function buildVigNav(){
+  const list = document.getElementById("vnavList");
+  if(!list) return;
+  list.innerHTML = "";
+  VIGNETTES.forEach(v=>{
+    const row = document.createElement("div");
+    row.className = "vrow"; row.dataset.n = v.n;
+    row.innerHTML =
+      `<span class="vswatch" style="background:${v.color}">${v.n}</span>`+
+      `<span class="vmeta"><span class="vtit">${v.title}</span><span class="vloc">${vigLoc(v)}</span></span>`+
+      `<span class="vcheck">○</span>`;
+    row.addEventListener("click", ()=>{
+      document.getElementById("vnav").classList.remove("on");
+      openVignette(v.n);
+    });
+    list.appendChild(row);
+  });
+  updateVigNav();
+}
+function updateVigNav(){
+  const total = VIGNETTES.length, seen = visitedVig.size, left = total - seen;
+  const cnt = document.getElementById("vnavCount");
+  if(cnt) cnt.textContent = `${seen}/${total}`;
+  const prog = document.getElementById("vnavProg");
+  if(prog) prog.textContent = left===0
+    ? `todas as ${total} vinhetas visitadas ✓`
+    : `${seen} de ${total} visitadas · faltam ${left}`;
+  document.querySelectorAll("#vnavList .vrow").forEach(row=>{
+    const n = +row.dataset.n, has = visitedVig.has(n);
+    row.classList.toggle("seen", has);
+    const chk = row.querySelector(".vcheck");
+    if(chk) chk.textContent = has ? "✓" : "○";
+  });
+}
+function markVigVisited(n){
+  visitedVig.add(n);
+  const dot = mapSvg.querySelector(`.dot[data-n="${n}"]`);
+  if(dot) dot.classList.add("seen");
+  updateVigNav();
+}
+document.getElementById("vnavBtn").addEventListener("click", ()=>{
+  document.getElementById("vnav").classList.toggle("on");
+});
+document.getElementById("vnavClose").addEventListener("click", ()=>{
+  document.getElementById("vnav").classList.remove("on");
+});
+
 buildOverview();
+buildVigNav();
 })();
 </script>
 </body>
