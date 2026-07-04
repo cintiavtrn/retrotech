@@ -285,6 +285,56 @@ footer p{color:#9db0bc;max-width:72em;font-size:.86rem}
   article.copy p{font-size:1rem}
   article.copy h2{font-size:1.28rem}
 }
+@media (max-width:900px){
+  .map-topbar{flex-wrap:wrap;gap:.5rem;padding:.7rem 1rem}
+  .map-topbar .brand{display:none}
+  .map-topbar .toarticle,.legbtn,.cluechip{font-size:.66rem;padding:.45rem .65rem}
+  .vnav,.helppanel{top:96px}
+  .dot circle.core{r:12}
+  .dot text{font-size:12px}
+  .pista circle:first-child{r:18}
+  .pista text{font-size:14px}
+}
+@media (max-width:640px){
+  .map-topbar{padding:.6rem .8rem;gap:.4rem}
+  #legendBtn{order:1}
+  .map-topbar .brand{display:none}
+  #clueChip{order:3;flex:1 1 100%;text-align:center;margin-top:.3rem}
+  #vnavBtn{order:2}
+  #helpBtn{order:4}
+  #toArticleBtn{order:5;flex:1 1 100%;margin-top:.4rem;text-align:center}
+  .map-topbar .toarticle{padding:.5rem .7rem;font-size:.64rem}
+
+  .mapsvg-hint{display:none}
+
+  .vnav{
+    top:auto;bottom:0;left:0;right:0;width:100%;max-height:75vh;
+    transform:translateY(110%);border-radius:12px 12px 0 0;
+  }
+  .vnav.on{transform:translateY(0)}
+
+  .helppanel{
+    top:auto;bottom:0;left:0;right:0;width:100%;max-height:60vh;
+    overflow-y:auto;border-radius:12px 12px 0 0;
+  }
+
+  .clue-tooltip{
+    left:50% !important;top:auto !important;bottom:12px !important;
+    transform:translate(-50%,0) !important;
+    width:min(340px,92vw);max-width:none;
+  }
+  .clue-tooltip.on{transform:translate(-50%,0) !important}
+
+  .dot circle.core{r:14}
+  .dot:hover circle.core{r:16}
+  .dot text{font-size:13px}
+  .pista circle:first-child{r:20}
+  .pista text{font-size:15px}
+
+  .baylegend{width:100vw}
+
+  #landing{padding:6vh 6vw 5vh}
+}
 </style>
 </head>
 <body>
