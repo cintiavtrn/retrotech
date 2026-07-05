@@ -113,6 +113,18 @@ a{color:inherit}
 #mapSvg{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .mapsvg-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-family:var(--mono);
   font-size:.66rem;letter-spacing:.1em;color:var(--isoInk);opacity:.55;text-transform:uppercase;pointer-events:none}
+.onboardTip{position:fixed;top:70px;left:50%;transform:translateX(-50%);z-index:58;
+  background:var(--pink);color:var(--paper);font-family:var(--mono);font-size:.82rem;
+  line-height:1.5;padding:.9rem 1.1rem;border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.4);
+  max-width:min(360px,90vw);text-align:center;opacity:0;pointer-events:none;
+  transition:opacity .3s ease}
+.onboardTip.on{opacity:1;pointer-events:auto}
+.onboardTip b{color:var(--sol)}
+.onboardTip .otbtns{display:flex;gap:.5rem;justify-content:center;margin-top:.7rem}
+.onboardTip button{font-family:var(--mono);font-size:.7rem;letter-spacing:.05em;text-transform:uppercase;
+  border:none;padding:.45rem .7rem;cursor:pointer;border-radius:4px}
+.onboardTip .otgo{background:var(--sol);color:var(--pink)}
+.onboardTip .otskip{background:none;border:1px solid rgba(255,255,255,.4);color:var(--paper)}
 .tourbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:56;display:none;
   align-items:center;gap:.6rem;background:var(--isoInk);color:var(--isoPaper);padding:.6rem .8rem;
   border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.35);max-width:94vw}
@@ -554,6 +566,13 @@ footer p{color:#9db0bc;max-width:72em;font-size:.86rem}
     <div class="vnav-sub">as 10 paradas do argumento</div>
     <div class="vnav-prog" id="vnavProg">0 de 10 visitadas · faltam 10</div>
     <div id="vnavList"></div>
+  </div>
+  <div class="onboardTip" id="onboardTip">
+    Pra aproveitar melhor, comece pelo <b>tour guiado</b> ou toque em <b>“ver tudo”</b> sempre que quiser voltar à visão geral.
+    <div class="otbtns">
+      <button class="otgo" id="onboardGo">▸ começar tour</button>
+      <button class="otskip" id="onboardSkip">explorar livre</button>
+    </div>
   </div>
   <div class="mapsvg-hint">arraste para navegar · pinça ou roda do mouse para zoom · pontos = vinhetas · tracejado laranja = pistas</div>
   <div class="tourbar" id="tourbar">
@@ -1641,11 +1660,25 @@ function openConversation(key){
 document.getElementById("enterBtn").addEventListener("click", ()=>{
   document.getElementById("landing").style.display = "none";
   document.getElementById("overview").style.display = "block";
+  const tip = document.getElementById("onboardTip");
+  tip.classList.add("on");
+  setTimeout(()=> tip.classList.remove("on"), 7000);
+});
+document.getElementById("onboardGo").addEventListener("click", ()=>{
+  document.getElementById("onboardTip").classList.remove("on");
+  showTourStep(0);
+});
+document.getElementById("onboardSkip").addEventListener("click", ()=>{
+  document.getElementById("onboardTip").classList.remove("on");
 });
 document.getElementById("toArticleBtn").addEventListener("click", ()=> openArticle(null));
 document.getElementById("backBtn").addEventListener("click", backToMap);
 document.getElementById("loopBtn").addEventListener("click", backToMap);
-document.getElementById("resetViewBtn").addEventListener("click", ()=> tweenTo(FULL_VB, 500));
+document.getElementById("resetViewBtn").addEventListener("click", ()=>{
+  tourIndex = -1;
+  document.getElementById("tourbar").classList.remove("on");
+  tweenTo(FULL_VB, 500);
+});
 
 const TOUR_ORDER = ["hobby","feed","anchors","capture","worker","retail","press","diag"];
 let tourIndex = -1;
