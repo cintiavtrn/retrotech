@@ -110,9 +110,26 @@ a{color:inherit}
 }
 
 #overview{display:none;height:100vh;position:relative;overflow:hidden;background:var(--mapBg)}
-#mapSvg{width:100%;height:100%;display:block}
+#mapSvg{width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 .mapsvg-hint{position:absolute;left:50%;bottom:22px;transform:translateX(-50%);font-family:var(--mono);
   font-size:.66rem;letter-spacing:.1em;color:var(--isoInk);opacity:.55;text-transform:uppercase;pointer-events:none}
+.tourbar{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);z-index:56;display:none;
+  align-items:center;gap:.6rem;background:var(--isoInk);color:var(--isoPaper);padding:.6rem .8rem;
+  border-radius:8px;box-shadow:0 12px 30px rgba(0,0,0,.35);max-width:94vw}
+.tourbar.on{display:flex}
+.tourbar-btn{font-family:var(--mono);font-size:.72rem;letter-spacing:.05em;text-transform:uppercase;
+  background:var(--isoPaper);color:var(--isoInk);border:none;padding:.5rem .8rem;cursor:pointer;border-radius:4px}
+.tourbar-info{display:flex;flex-direction:column;align-items:center;padding:0 .4rem;min-width:120px}
+.tourbar-n{font-family:var(--px);font-size:.62rem;letter-spacing:.1em;opacity:.7;text-transform:uppercase}
+.tourbar-title{font-family:var(--disp);font-weight:700;font-size:.92rem;text-align:center;line-height:1.2}
+.tourbar-exit{font-family:var(--mono);font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;
+  background:none;border:1px solid rgba(255,255,255,.4);color:var(--isoPaper);padding:.45rem .6rem;
+  cursor:pointer;border-radius:4px;opacity:.75}
+@media (max-width:640px){
+  .tourbar{bottom:10px;padding:.5rem .6rem;gap:.4rem;flex-wrap:wrap;justify-content:center}
+  .tourbar-info{min-width:90px}
+  .tourbar-title{font-size:.82rem}
+}
 .map-topbar{position:absolute;top:0;left:0;right:0;display:flex;justify-content:space-between;align-items:center;
   padding:1rem 1.4rem;pointer-events:none}
 .map-topbar .brand{font-family:var(--px);font-size:.7rem;letter-spacing:.14em;color:var(--isoInk);opacity:.55;text-transform:uppercase}
@@ -506,6 +523,8 @@ footer p{color:#9db0bc;max-width:72em;font-size:.86rem}
     <button class="toarticle" id="vnavBtn" style="margin-right:.6rem">◎ vinhetas <span id="vnavCount">0/10</span></button>
     <button class="toarticle" id="helpBtn" style="margin-right:.6rem">?</button>
 
+    <button class="legbtn" id="tourBtn" style="margin-right:.6rem">▸ tour guiado</button>
+    <button class="legbtn" id="resetViewBtn" style="margin-right:.6rem">⤢ ver tudo</button>
     <button class="toarticle" id="toArticleBtn">Ler ensaio completo →</button>
   </div>
   <svg id="mapSvg" viewBox="0 0 1800 1050" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet"></svg>
@@ -536,7 +555,16 @@ footer p{color:#9db0bc;max-width:72em;font-size:.86rem}
     <div class="vnav-prog" id="vnavProg">0 de 10 visitadas · faltam 10</div>
     <div id="vnavList"></div>
   </div>
-  <div class="mapsvg-hint">pontos numerados = vinhetas · marcas tracejadas laranja = pistas escondidas</div>
+  <div class="mapsvg-hint">arraste para navegar · pinça ou roda do mouse para zoom · pontos = vinhetas · tracejado laranja = pistas</div>
+  <div class="tourbar" id="tourbar">
+    <button class="tourbar-btn" id="tourPrev">‹ voltar</button>
+    <div class="tourbar-info">
+      <span class="tourbar-n" id="tourStepN"></span>
+      <span class="tourbar-title" id="tourStepTitle"></span>
+    </div>
+    <button class="tourbar-btn" id="tourNext">seguinte ›</button>
+    <button class="tourbar-exit" id="tourExit">✕ sair do tour</button>
+  </div>
   <div class="vpanel" id="vpanel">
     <div class="vp-cab">
       <div class="vp-n" id="vpN">1</div>
@@ -967,6 +995,7 @@ function SpeechBubble(w,h,text,tailLeft){
 }
 function ConversationMarker(figColors){
   const scene = g();
+  scene.appendChild(el("circle",{cx:0,cy:10,r:42,fill:"transparent"}));
   figColors.forEach((c,i)=>{
     const fig = el("g",{transform:`translate(${i===0?-16:16} 30) scale(0.85)`});
     fig.appendChild(StickFigure(c));
@@ -1202,6 +1231,7 @@ function buildOverview(){
     const a = bayAnchor(v.bay);
     const x = a.sx + v.dx, y = a.sy + v.dy;
     const dot = el("g",{class:"dot","data-n":v.n});
+    dot.appendChild(el("circle",{cx:x,cy:y,r:26,fill:"transparent"}));
     dot.appendChild(el("circle",{class:"ring",cx:x,cy:y,r:14,fill:"none",stroke:v.color,"stroke-width":1.6}));
     dot.appendChild(el("circle",{class:"core",cx:x,cy:y,r:10,fill:v.color,stroke:STROKE,"stroke-width":1.6}));
     const numTxt = el("text",{x,y:y+4,"text-anchor":"middle","font-size":11,fill:"#fff"});
@@ -1224,6 +1254,7 @@ function buildOverview(){
     const a = bayAnchor(p.bay);
     const x = a.sx + p.dx, y = a.sy + p.dy;
     const pd = el("g",{class:"pista","data-i":i});
+    pd.appendChild(el("circle",{cx:x,cy:y,r:26,fill:"transparent"}));
     pd.appendChild(el("circle",{cx:x,cy:y,r:15,fill:C.sol||"#e9c46a",opacity:0.18}));
     pd.appendChild(el("circle",{class:"pmark",cx:x,cy:y,r:13}));
     const q = el("text",{x,y:y+4,"text-anchor":"middle"});
@@ -1290,6 +1321,77 @@ function tweenTo(target, ms){
   requestAnimationFrame(frame);
 }
 
+const ZOOM_MIN_W = 320, ZOOM_MAX_W = 1800;
+function zoomAtFromVB(baseVB, clientX, clientY, factor){
+  const rect = mapSvg.getBoundingClientRect();
+  const px = (clientX-rect.left)/rect.width, py = (clientY-rect.top)/rect.height;
+  const pt = { x: baseVB[0]+px*baseVB[2], y: baseVB[1]+py*baseVB[3] };
+  let newW = baseVB[2]*factor;
+  newW = Math.max(ZOOM_MIN_W, Math.min(ZOOM_MAX_W, newW));
+  const newH = newW * (1050/1800);
+  const ratioX = (pt.x-baseVB[0])/baseVB[2], ratioY = (pt.y-baseVB[1])/baseVB[3];
+  let newX = pt.x - ratioX*newW, newY = pt.y - ratioY*newH;
+  newX = Math.max(0, Math.min(1800-newW, newX));
+  newY = Math.max(0, Math.min(1050-newH, newY));
+  curVB = [newX,newY,newW,newH];
+  mapSvg.setAttribute("viewBox", curVB.map(n=>n.toFixed(1)).join(" "));
+}
+mapSvg.addEventListener("wheel", e=>{
+  e.preventDefault();
+  const factor = e.deltaY > 0 ? 1.15 : 1/1.15;
+  zoomAtFromVB(curVB, e.clientX, e.clientY, factor);
+}, {passive:false});
+
+let isPanningMouse=false, panStartM=null, panBaseVB=null;
+mapSvg.addEventListener("mousedown", e=>{
+  isPanningMouse=true; panStartM={x:e.clientX,y:e.clientY}; panBaseVB=curVB.slice();
+  mapSvg.style.cursor="grabbing";
+});
+window.addEventListener("mousemove", e=>{
+  if(!isPanningMouse) return;
+  const rect = mapSvg.getBoundingClientRect();
+  const dx=(e.clientX-panStartM.x)/rect.width*panBaseVB[2];
+  const dy=(e.clientY-panStartM.y)/rect.height*panBaseVB[3];
+  let newX=panBaseVB[0]-dx, newY=panBaseVB[1]-dy;
+  newX=Math.max(0,Math.min(1800-panBaseVB[2],newX));
+  newY=Math.max(0,Math.min(1050-panBaseVB[3],newY));
+  curVB=[newX,newY,panBaseVB[2],panBaseVB[3]];
+  mapSvg.setAttribute("viewBox", curVB.map(n=>n.toFixed(1)).join(" "));
+});
+window.addEventListener("mouseup", ()=>{ isPanningMouse=false; mapSvg.style.cursor="grab"; });
+
+let touchState=null;
+mapSvg.addEventListener("touchstart", e=>{
+  if(e.touches.length===1){
+    touchState={mode:"pan",x:e.touches[0].clientX,y:e.touches[0].clientY,vb:curVB.slice()};
+  } else if(e.touches.length===2){
+    const dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
+    touchState={mode:"pinch",dist:Math.hypot(dx,dy),vb:curVB.slice(),
+      midX:(e.touches[0].clientX+e.touches[1].clientX)/2, midY:(e.touches[0].clientY+e.touches[1].clientY)/2};
+  }
+}, {passive:true});
+mapSvg.addEventListener("touchmove", e=>{
+  if(!touchState) return;
+  if(touchState.mode==="pan" && e.touches.length===1){
+    e.preventDefault();
+    const rect=mapSvg.getBoundingClientRect();
+    const dx=(e.touches[0].clientX-touchState.x)/rect.width*touchState.vb[2];
+    const dy=(e.touches[0].clientY-touchState.y)/rect.height*touchState.vb[3];
+    let newX=touchState.vb[0]-dx, newY=touchState.vb[1]-dy;
+    newX=Math.max(0,Math.min(1800-touchState.vb[2],newX));
+    newY=Math.max(0,Math.min(1050-touchState.vb[3],newY));
+    curVB=[newX,newY,touchState.vb[2],touchState.vb[3]];
+    mapSvg.setAttribute("viewBox", curVB.map(n=>n.toFixed(1)).join(" "));
+  } else if(touchState.mode==="pinch" && e.touches.length===2){
+    e.preventDefault();
+    const dx=e.touches[0].clientX-e.touches[1].clientX, dy=e.touches[0].clientY-e.touches[1].clientY;
+    const dist=Math.hypot(dx,dy);
+    zoomAtFromVB(touchState.vb, touchState.midX, touchState.midY, touchState.dist/dist);
+  }
+}, {passive:false});
+mapSvg.addEventListener("touchend", ()=>{ touchState=null; });
+mapSvg.style.cursor="grab";
+
 let activeCleanup = null;
 function clearWidget(){
   if(activeCleanup){ activeCleanup(); activeCleanup = null; }
@@ -1298,6 +1400,7 @@ function clearWidget(){
 function openVignette(n){
   const v = VIGNETTES.find(x=>x.n===n);
   if(!v) return;
+  document.getElementById("tourbar").classList.remove("on");
   tweenTo(bboxForBay(v.bay), 650);
   document.getElementById("vpN").textContent = v.n;
   document.getElementById("vpN").style.background = v.color;
@@ -1320,7 +1423,12 @@ function setTab(which){
 function closeVignette(){
   document.getElementById("vpanel").classList.remove("on");
   clearWidget();
-  tweenTo(FULL_VB, 550);
+  if(tourIndex>=0){
+    tweenTo(bboxForBay(TOUR_ORDER[tourIndex]), 550);
+    document.getElementById("tourbar").classList.add("on");
+  } else {
+    tweenTo(FULL_VB, 550);
+  }
 }
 
 function widgetJersey(el0){
@@ -1537,6 +1645,34 @@ document.getElementById("enterBtn").addEventListener("click", ()=>{
 document.getElementById("toArticleBtn").addEventListener("click", ()=> openArticle(null));
 document.getElementById("backBtn").addEventListener("click", backToMap);
 document.getElementById("loopBtn").addEventListener("click", backToMap);
+document.getElementById("resetViewBtn").addEventListener("click", ()=> tweenTo(FULL_VB, 500));
+
+const TOUR_ORDER = ["hobby","feed","anchors","capture","worker","retail","press","diag"];
+let tourIndex = -1;
+function showTourStep(i){
+  tourIndex = i;
+  const key = TOUR_ORDER[i];
+  tweenTo(bboxForBay(key), 650);
+  document.getElementById("tourbar").classList.add("on");
+  document.getElementById("tourStepN").textContent = `parada ${i+1} de ${TOUR_ORDER.length}`;
+  document.getElementById("tourStepTitle").textContent = BAY_LABELS[key] || key;
+  document.getElementById("tourPrev").style.visibility = i===0 ? "hidden" : "visible";
+  document.getElementById("tourNext").textContent = i===TOUR_ORDER.length-1 ? "concluir ✕" : "seguinte ›";
+}
+function exitTour(){
+  tourIndex = -1;
+  document.getElementById("tourbar").classList.remove("on");
+  tweenTo(FULL_VB, 550);
+}
+document.getElementById("tourBtn").addEventListener("click", ()=> showTourStep(0));
+document.getElementById("tourExit").addEventListener("click", exitTour);
+document.getElementById("tourPrev").addEventListener("click", ()=>{
+  if(tourIndex>0) showTourStep(tourIndex-1);
+});
+document.getElementById("tourNext").addEventListener("click", ()=>{
+  if(tourIndex < TOUR_ORDER.length-1) showTourStep(tourIndex+1);
+  else exitTour();
+});
 document.getElementById("vpClose").addEventListener("click", closeVignette);
 document.getElementById("convBackBtn").addEventListener("click", backToMap);
 document.getElementById("convBackBtn2").addEventListener("click", backToMap);
@@ -1616,8 +1752,18 @@ document.getElementById("vnavClose").addEventListener("click", ()=>{
   document.getElementById("vnav").classList.remove("on");
 });
 
+function reportHeightToParent(){
+  try{
+    parent.postMessage({ atlasHeight: document.documentElement.scrollHeight }, "*");
+  }catch(e){}
+}
+window.addEventListener("resize", reportHeightToParent);
+new MutationObserver(reportHeightToParent).observe(document.body, {childList:true, subtree:true, attributes:true});
+setInterval(reportHeightToParent, 800);
+
 buildOverview();
 buildVigNav();
+reportHeightToParent();
 })();
 </script>
 </body>
