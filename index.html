@@ -161,8 +161,8 @@ a{color:inherit}
 .pista.found text{fill:var(--isoTealDeep)}
 .clue-tooltip{position:fixed;z-index:70;background:var(--pink);color:var(--paper);font-family:var(--mono);
   font-size:.92rem;line-height:1.6;padding:.95rem 1.1rem;max-width:340px;box-shadow:0 10px 30px rgba(0,0,0,.4);
-  pointer-events:auto;cursor:pointer;opacity:0;transition:opacity .2s ease;transform:translate(-50%,-110%)}
-.clue-tooltip.on{opacity:1}
+  pointer-events:none;cursor:pointer;opacity:0;transition:opacity .2s ease;transform:translate(-50%,-110%)}
+.clue-tooltip.on{opacity:1;pointer-events:auto}
 .clue-tooltip .ctclose{display:block;margin-top:.65rem;font-size:.62rem;letter-spacing:.08em;
   text-transform:uppercase;color:var(--cy);opacity:.75;text-align:right}
 .vnav{position:fixed;top:60px;right:14px;z-index:52;width:min(348px,92vw);max-height:calc(100vh - 84px);
