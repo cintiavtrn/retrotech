@@ -41,13 +41,29 @@ a{color:inherit}
 .enterbtn{align-self:flex-start;background:var(--sol);color:var(--pink);font-family:var(--px);font-weight:700;font-size:.85rem;
   letter-spacing:.04em;text-transform:uppercase;padding:1rem 1.8rem;border:none;cursor:pointer}
 .enterbtn:hover{background:#f0d68a}
-.howbox{border-left:2px solid var(--rota);padding-left:1.1rem;max-width:40em;margin-bottom:1.6rem}
-.howbox-h{font-family:var(--px);font-size:.68rem;letter-spacing:.14em;color:var(--sol);text-transform:uppercase;margin-bottom:.6rem}
+/* Sem caixa, sem barra colorida na lateral, sem rotulo em caixa alta
+   colorida. O rotulo fica pendurado na margem e o unico traco e um
+   filete, como entretitulo de pagina impressa. */
+.howbox,.methodbox{
+  max-width:46em;margin-bottom:1.7rem;
+  padding-top:.75rem;border-top:1px solid rgba(220,232,238,.18);
+  display:grid;grid-template-columns:106px 1fr;gap:0 18px;
+}
+.howbox-h{
+  grid-column:1;grid-row:1;margin:0;
+  font-family:var(--px);font-size:.62rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--ink);opacity:.4;
+  text-align:right;line-height:1.75;
+}
+.howbox p,.methodbox p{grid-column:2;}
 .howbox p{color:#a9bcc7;font-size:.88rem;margin-bottom:.6rem}
 .howbox b{color:var(--ink)}
-.methodbox{border-left:2px solid #3a5468;padding-left:1.1rem;max-width:40em;margin-bottom:1.6rem}
 .methodbox p{color:#7f97a4;font-size:.78rem;line-height:1.6;margin-bottom:.6rem}
 .methodbox em{color:#a9bcc7;font-style:italic}
+@media (max-width:640px){
+  .howbox,.methodbox{grid-template-columns:1fr;gap:7px}
+  .howbox-h{text-align:left;line-height:1.6}
+}
 
 .baylegend{position:fixed;top:0;left:0;bottom:0;z-index:55;width:min(320px,86vw);background:var(--paper);color:var(--pink);
   padding:1.4rem 1.2rem;overflow-y:auto;transform:translateX(-100%);transition:transform .3s ease;box-shadow:0 0 40px rgba(0,0,0,.4)}
@@ -172,7 +188,7 @@ a{color:inherit}
 .vnav h4{font-family:var(--disp);font-size:1.08rem;margin-bottom:.1rem}
 .vnav .vnav-sub{font-family:var(--mono);font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;opacity:.6;margin-bottom:.6rem}
 .vnav .vnav-prog{font-family:var(--mono);font-size:.72rem;letter-spacing:.03em;margin-bottom:.95rem;
-  padding:.5rem .65rem;background:rgba(0,0,0,.05);border-left:3px solid var(--acc)}
+  padding:.5rem 0;border-top:1px solid rgba(0,0,0,.18);border-bottom:1px solid rgba(0,0,0,.12)}
 .vnav-close{position:absolute;top:.7rem;right:.85rem;background:none;border:none;color:var(--pink);font-size:1rem;cursor:pointer;opacity:.6}
 .vrow{display:flex;gap:.6rem;align-items:flex-start;padding:.6rem .5rem;cursor:pointer;border-bottom:1px solid rgba(0,0,0,.08)}
 .vrow:hover{background:rgba(0,0,0,.05)}
@@ -298,7 +314,8 @@ article.copy a[href]:hover{text-decoration-color:var(--cy)}
   text-transform:uppercase;margin-top:.4rem;opacity:.75}
 
 .pullquote{font-family:var(--disp);font-weight:600;font-size:1.5rem;line-height:1.35;color:var(--cy);
-  margin:2.6rem 0;padding-left:1.2rem;border-left:3px solid var(--rota)}
+  margin:2.6rem 0;padding-top:1.1rem;position:relative}
+.pullquote::before{content:"";position:absolute;top:0;left:0;width:58px;height:2px;background:var(--rota)}
 
 .art-end{max-width:640px;margin:0 auto;padding:0 6vw 10vh;text-align:center}
 .art-end button{font-family:var(--px);font-size:.72rem;letter-spacing:.08em;color:var(--sea);background:var(--cy);
